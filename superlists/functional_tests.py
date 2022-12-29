@@ -1,3 +1,4 @@
+import self as self
 from selenium import webdriver
 import unittest
 
