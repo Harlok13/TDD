@@ -1,6 +1,8 @@
 from selenium import webdriver
 import unittest
 import time
+
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
 
@@ -23,12 +25,12 @@ class NewVisitorTest(unittest.TestCase):
 
         # Она видит, что заголовок и шапка страницы говорят о списках
         # неотложных дел
-        self.assertIn('To-Do lists', self.browser.title)
-        header_text = self.browser.find_element('h1').text
-        self.assertIn('To-Do lists', header_text)
+        self.assertIn('To-Do list', self.browser.title)
+        header_text = self.browser.find_element(By.TAG_NAME, 'h1').text
+        self.assertIn('To-Do list', header_text)
 
         # Ей сразу же предлагается ввести элемент списка
-        inputbox = self.browser.find_element('id_new_item')
+        inputbox = self.browser.find_element(By.ID, 'id_new_item')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
@@ -42,9 +44,12 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element('id_list_table')
-        rows = table.find_elements('tr')
-        self.assertTrue(any(row.text == '1: Купить павлиньи перья' for row in rows))
+        table = self.browser.find_element(By.ID, 'id_list_table')
+        rows = table.find_elements(By.TAG_NAME, 'tr')
+        self.assertTrue(
+            any(row.text == '1: Купить павлиньи перья' for row in rows),
+            'Новый элемент списка не появился в таблице'
+        )
 
         # Текстовое поле по-прежнему приглашает ее добавить еще один элемент.
         # Она вводит "Сделать мушку из павлиньих перьев"
@@ -58,7 +63,6 @@ class NewVisitorTest(unittest.TestCase):
 
         # Она посещает этот URL-адрес – ее список по-прежнему там.
         # Удовлетворенная, она снова ложится спать
-
 
 
 if __name__ == '__main__':

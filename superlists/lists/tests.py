@@ -12,4 +12,3 @@ class HomePageTest(TestCase):
         """Тест: домашняя страница возвращает правильный html"""
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'lists/home.html')
-
